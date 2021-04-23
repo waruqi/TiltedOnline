@@ -67,8 +67,9 @@ uint8_t TP_MAKE_THISCALL(HookPerformAction, ActorMediator, TESActionData* apActi
 
 ActorMediator* ActorMediator::Get() noexcept
 {
+    static AutoPtr<ActorMediator*> s_actorMediator(kActorMediator_Instance);
+
     POINTER_FALLOUT4(ActorMediator*, s_actorMediator, 0x145AA4710 - 0x140000000);
-    POINTER_SKYRIMSE(ActorMediator*, s_actorMediator, 0x142F271C0 - 0x140000000);
 
     return *(s_actorMediator.Get());
 }
@@ -109,9 +110,11 @@ bool ActorMediator::ForceAction(TESActionData* apAction) noexcept
     TP_THIS_FUNCTION(TAnimationStep, uint8_t, ActorMediator, TESActionData*);
     using TApplyAnimationVariables = void* (void*, TESActionData*);
 
-    POINTER_SKYRIMSE(TApplyAnimationVariables, ApplyAnimationVariables, 0x63D0F0);
-    POINTER_SKYRIMSE(TAnimationStep, PerformComplexAction, 0x63B0F0);
-    POINTER_SKYRIMSE(void*, qword_142F271B8, 0x142F271B8 - 0x140000000);
+    static AutoPtr<TAnimationStep> PerformComplexAction(kPerformComplexAction);
+#if TP_SKYRIM64
+    static AutoPtr<TApplyAnimationVariables> ApplyAnimationVariables(kApplyAnimationVariables);
+    static AutoPtr<void*> qword_142F271B8(kApplyAnimationVariables_Instance);
+#endif
 
     POINTER_FALLOUT4(TAnimationStep, PerformComplexAction, 0x140E211A0 - 0x140000000);
     uint8_t result = 0;
@@ -173,7 +176,8 @@ TESActionData::TESActionData(uint32_t aParam1, Actor* apActor, BGSAction* apActi
     : BGSActionData(aParam1, apActor, apAction, apTarget)
 {
     POINTER_FALLOUT4(void*, s_vtbl, 0x142C4A2A8 - 0x140000000);
-    POINTER_SKYRIMSE(void*, s_vtbl, 0x141548198 - 0x140000000);
+
+    static AutoPtr<void*> s_vtbl(kTESActionData_vtable);
 
     someFlag = false;
 

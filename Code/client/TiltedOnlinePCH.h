@@ -38,6 +38,7 @@
 #include <TiltedCore/TaskQueue.hpp>
 #include <TiltedCore/Buffer.hpp>
 #include <TiltedCore/Initializer.hpp>
+#include <TiltedCore/Hash.hpp>
 
 // TiltedReverse
 #include <AutoPtr.hpp>
@@ -53,6 +54,8 @@
 #include <spdlog/spdlog.h>
 #include <glm/glm.hpp>
 #include <glm/gtx/norm.hpp>
+#include <mem/module.h>
+#include <mem/pattern.h>
 
 #include <any>
 #include <mutex>
@@ -64,7 +67,7 @@
 #include <Utils.h>
 #include <BuildInfo.h>
 #include <Games/Primitives.h>
-
+#include <Pointers.h>
 
 extern "C"
 {
